@@ -1,0 +1,73 @@
+{
+  "missions": [
+    {
+      "title": "Infiltration",
+      "description": "Вам потрібно проникнути в найближче коло ворога.",
+      "scenes": [
+        {
+          "id": "scene1",
+          "narrativeText": "Ви стоїте біля воріт бази ворога. Ваші дії визначають успіх місії.",
+          "choices": [
+            {
+              "description": "Підкрастися непомітно через задній вхід",
+              "nextSceneId": "scene2",
+              "riskLevel": 20,
+              "rewardPoints": 50
+            },
+            {
+              "description": "Спробувати обійти охорону спереду",
+              "nextSceneId": "scene3",
+              "riskLevel": 50,
+              "rewardPoints": 100
+            }
+          ],
+          "isEndingScene": false
+        },
+        {
+          "id": "scene2",
+          "narrativeText": "Ви пройшли непомітно через задній вхід. Охорона ще не помітила вас.",
+          "choices": [
+            {
+              "description": "Перевірити документи охоронців",
+              "nextSceneId": "scene4",
+              "riskLevel": 10,
+              "rewardPoints": 30
+            },
+            {
+              "description": "Поставити пастку в коридорі",
+              "nextSceneId": "scene5",
+              "riskLevel": 25,
+              "rewardPoints": 70
+            }
+          ],
+          "isEndingScene": false
+        },
+        {
+          "id": "scene3",
+          "narrativeText": "Охорона помітила вас! Рівень підозри значно зростає.",
+          "choices": [
+            {
+              "description": "Втекти назад",
+              "nextSceneId": null,
+              "riskLevel": 5,
+              "rewardPoints": 10
+            }
+          ],
+          "isEndingScene": true
+        },
+        {
+          "id": "scene4",
+          "narrativeText": "Ви отримали цінну інформацію про внутрішні плани ворога.",
+          "choices": [],
+          "isEndingScene": true
+        },
+        {
+          "id": "scene5",
+          "narrativeText": "Ваша пастка спрацювала. Виконавці ворога знерухомлені.",
+          "choices": [],
+          "isEndingScene": true
+        }
+      ]
+    }
+  ]
+}
