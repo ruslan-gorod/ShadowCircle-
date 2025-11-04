@@ -1,13 +1,12 @@
 package com.game.shadowcircle.application;
 
+import com.game.shadowcircle.engine.GameEngine;
 import com.game.shadowcircle.events.DefaultGameEventPublisher;
 import com.game.shadowcircle.events.GameEvent;
-import com.game.shadowcircle.events.GameEventListener;
 import com.game.shadowcircle.model.Choice;
 import com.game.shadowcircle.model.GameState;
 import com.game.shadowcircle.model.Scene;
 import com.game.shadowcircle.service.DialogueService;
-import com.game.shadowcircle.service.GameEngine;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +32,8 @@ public class ConsoleAppRunner implements ApplicationRunner {
     gameEngine.startNewGame(playerName);
 
     // 2. Підписуємо слухача подій
-    eventPublisher.registerListener(new GameEventListener() {
-      @Override
-      public void onGameEvent(GameEvent event) {
-        log.info("Подія гри: {} - {}", event.getType(), event.getMessage());
-      }
-    });
+    eventPublisher.registerListener(
+        event -> log.info("Подія гри: {} - {}", event.getType(), event.getMessage()));
 
     // 3. Основний ігровий цикл
     while (true) {

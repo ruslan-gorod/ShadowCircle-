@@ -2,11 +2,10 @@ package com.game.shadowcircle.service.impl;
 
 import com.game.shadowcircle.model.Enemy;
 import com.game.shadowcircle.service.EnemyService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

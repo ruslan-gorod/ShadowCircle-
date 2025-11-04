@@ -1,4 +1,4 @@
-package com.game.shadowcircle.service;
+package com.game.shadowcircle.engine;
 
 import com.game.shadowcircle.model.Choice;
 import com.game.shadowcircle.model.GameState;

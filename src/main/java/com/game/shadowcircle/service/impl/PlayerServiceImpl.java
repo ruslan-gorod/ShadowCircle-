@@ -38,7 +38,8 @@ public class PlayerServiceImpl implements PlayerService {
   public void addScore(int points) {
     if (currentPlayer != null) {
       currentPlayer.setScore(currentPlayer.getScore() + points);
-      log.info("Гравець '{}' отримав {} балів, загальний бал: {}", currentPlayer.getName(), points, currentPlayer.getScore());
+      log.info("Гравець '{}' отримав {} балів, загальний бал: {}", currentPlayer.getName(), points,
+          currentPlayer.getScore());
     }
   }
 
@@ -47,7 +48,8 @@ public class PlayerServiceImpl implements PlayerService {
     if (currentPlayer != null) {
       int health = currentPlayer.getHealth() - risk;
       currentPlayer.setHealth(Math.max(0, health));
-      log.info("Гравець '{}' отримав ризик {}. Здоров'я: {}", currentPlayer.getName(), risk, currentPlayer.getHealth());
+      log.info("Гравець '{}' отримав ризик {}. Здоров'я: {}", currentPlayer.getName(), risk,
+          currentPlayer.getHealth());
     }
   }
 }

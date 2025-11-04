@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class Scene {
 
   private String id;
+  private String title;
   private String narrativeText;
   private List<Choice> choices;
   @JsonProperty("isEndingScene")

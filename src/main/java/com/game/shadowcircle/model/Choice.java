@@ -16,4 +16,6 @@ public class Choice {
   private int riskLevel;
   private int rewardPoints;
   private Item itemReward;
+  private int stealthRequirement;
+  private boolean highProfile;
 }
