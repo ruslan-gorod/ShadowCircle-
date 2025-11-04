@@ -1,6 +1,6 @@
 package com.game.shadowcircle.decorator;
 
-import com.game.shadowcircle.strategy.DecisionResult;
+import com.game.shadowcircle.model.DecisionResult;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ public class DisguiseModifier implements OutcomeModifier {
   public DecisionResult modify(DecisionResult base) {
     return base.builder()
         .suspicionIncrease(base.getSuspicionIncrease() / 2)
-        .message(base.getMessage() + " [Маскування допомогло]")
+        .message(base.getMessage() + " [Masking helped]")
         .build();
   }
 }

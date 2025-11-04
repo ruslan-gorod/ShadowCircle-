@@ -1,15 +1,24 @@
 package com.game.shadowcircle.events;
 
+import com.game.shadowcircle.factory.Difficulty;
 import com.game.shadowcircle.model.Player;
-import lombok.Getter;
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class GameStartedEvent extends GameEvent {
 
-  private final Player player;
+  private Player player;
+  private Difficulty difficulty;
 
   public GameStartedEvent(Player player) {
-    super("GAME_STARTED", "Гра розпочата для гравця: " + player.getName(), player);
+    super();
+    this.setType("GAME_STARTED");
+    this.setMessage(
+        String.format("Congratulations, Agent %s! The game has started.", player.getName()));
+    this.setTimestamp(LocalDateTime.now());
     this.player = player;
   }
 }

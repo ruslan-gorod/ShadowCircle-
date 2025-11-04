@@ -3,7 +3,6 @@ package com.game.shadowcircle.service;
 import com.game.shadowcircle.command.GameCommand;
 import com.game.shadowcircle.events.GameEvent;
 import com.game.shadowcircle.events.GameEventPublisher;
-import com.game.shadowcircle.model.GameContext;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +21,10 @@ public class CommandProcessor {
   /**
    * Виконує команду
    */
-  public void execute(GameCommand command, GameContext context) {
-    log.debug("Виконання команди: {}", command.getClass().getSimpleName());
+  public void execute(GameCommand command) {
+    log.debug("Command execution: {}", command.getClass().getSimpleName());
 
-    if (!command.canExecute(context)) {
-      log.warn("Команду не можна виконати: {}", command.getClass().getSimpleName());
-      return;
-    }
-
-    command.execute(context);
+    command.execute();
 
     // Зберігаємо команду в історії для можливості відміни
     executedCommands.addLast(command);
@@ -42,32 +36,28 @@ public class CommandProcessor {
 
     // Публікуємо подію про виконання команди
     eventPublisher.publishEvent(
-        GameEvent.builder()
-            .type("COMMAND_EXECUTED")
-            .message("Виконано: " + command.getClass().getSimpleName())
-            .build()
+        GameEvent.of("COMMAND_EXECUTED",
+            "Done: " + command.getClass().getSimpleName())
     );
   }
 
   /**
    * Відміняє останню команду
    */
-  public boolean undo(GameContext context) {
+  public boolean undo() {
     if (executedCommands.isEmpty()) {
-      log.warn("Немає команд для відміни");
+      log.warn("No commands to cancel");
       return false;
     }
 
     GameCommand lastCommand = executedCommands.removeLast();
-    log.debug("Відміна команди: {}", lastCommand.getClass().getSimpleName());
+    log.debug("Canceling a command: {}", lastCommand.getClass().getSimpleName());
 
-    lastCommand.undo(context);
+    lastCommand.undo();
 
     eventPublisher.publishEvent(
-        GameEvent.builder()
-            .type("COMMAND_UNDONE")
-            .message("Відмінено: " + lastCommand.getClass().getSimpleName())
-            .build()
+        GameEvent.of("COMMAND_UNDONE",
+            "Cancelled: " + lastCommand.getClass().getSimpleName())
     );
 
     return true;
@@ -78,7 +68,7 @@ public class CommandProcessor {
    */
   public void clearHistory() {
     executedCommands.clear();
-    log.debug("Історію команд очищено");
+    log.debug("Command history cleared");
   }
 
   /**

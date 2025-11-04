@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 public class GadgetItem extends Item {
 
   public GadgetItem(String name, String description) {
-    super(name, description);
+    this.setName(name);
+    this.setDescription(description);
   }
 
   @Override

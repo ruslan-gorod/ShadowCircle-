@@ -1,14 +1,22 @@
 package com.game.shadowcircle.events;
 
-import lombok.Getter;
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class InvalidChoiceEvent extends GameEvent {
 
-  private final String validationError;
+  private String reason;
+  private int severity;
 
-  public InvalidChoiceEvent(String validationError) {
-    super("INVALID_CHOICE", "Недійсний вибір: " + validationError, null);
-    this.validationError = validationError;
+  public InvalidChoiceEvent(String reason) {
+    super();
+    this.setType("INVALID_CHOICE");
+    this.setMessage("Unable to perform action: " + reason);
+    this.setSeverity(1);
+    this.setTimestamp(LocalDateTime.now());
+    this.reason = reason;
   }
 }

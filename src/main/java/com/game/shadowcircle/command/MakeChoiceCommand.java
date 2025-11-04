@@ -1,36 +1,68 @@
 package com.game.shadowcircle.command;
 
 import com.game.shadowcircle.model.Choice;
+import com.game.shadowcircle.model.DecisionResult;
 import com.game.shadowcircle.model.GameContext;
-import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.game.shadowcircle.model.Player;
+import com.game.shadowcircle.strategy.DecisionStrategy;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor(force = true)
-@AllArgsConstructor
-public class MakeChoiceCommand extends BaseGameCommand {
+@Data
+@RequiredArgsConstructor
+public class MakeChoiceCommand implements GameCommand {
 
   private final Choice choice;
+  private final DecisionStrategy strategy;
+  private final GameContext context;
+
+  private DecisionResult result;
+  private GameContext previousContext;
 
   @Override
-  public void execute(GameContext context) {
-    context.getPlayer().addScore(Objects.requireNonNull(choice).getRewardPoints());
-    context.getPlayer().applyRisk(choice.getRiskLevel());
-    if (choice.getItemReward() != null) {
-      context.getInventory().addItem(choice.getItemReward());
+  public void execute() {
+    // Зберігаємо попередній стан для можливості відміни
+    previousContext = context.deepCopy();
+
+    // Виконуємо рішення
+    result = strategy.evaluate(choice, context.getPlayer(), context);
+
+    // Застосовуємо зміни
+    applyResult(result, context);
+
+    // Записуємо в історію
+    context.recordChoice(choice);
+  }
+
+  @Override
+  public void undo() {
+    if (previousContext != null) {
+      // TODO Відновлюємо попередній контекст
+      // (потребує реалізації методів копіювання стану)
     }
-    context.transitionToScene(choice.getNextSceneId());
   }
 
   @Override
-  public void undo(GameContext context) {
-    // Реалізація відміни для складних сценаріїв
+  public boolean canExecute() {
+    return context.getPlayer().isAlive() &&
+        context.isCoverIntact();
   }
 
-  @Override
-  public boolean canExecute(GameContext context) {
-    return super.canExecute(context) &&
-        context.getPlayer().isAlive() &&
-        !context.getPlayer().isCompromised();
+  private void applyResult(DecisionResult result, GameContext context) {
+    Player player = context.getPlayer();
+
+    player.setScore(player.getScore() + result.getScoreGain());
+    player.setHealth(player.getHealth() + result.getHealthChange());
+    context.addSuspicion(result.getSuspicionIncrease());
+
+    // Додаємо предмети
+    result.getItemsGained().forEach(item ->
+        context.getInventory().addItem(item)
+    );
+
+    // Застосовуємо зміни у відносинах
+    result.getRelationshipChanges().forEach((npc, change) ->
+        context.improveRelationship(npc, change)
+    );
   }
 }

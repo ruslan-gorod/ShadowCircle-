@@ -1,62 +1,59 @@
 package com.game.shadowcircle.state;
 
-import com.game.shadowcircle.command.GameCommand;
-import com.game.shadowcircle.command.MakeChoiceCommand;
 import com.game.shadowcircle.model.Choice;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Scene;
+import java.util.List;
 
-public class MissionActiveState implements GameState {
+public class MissionActiveState implements State {
 
   private Scene currentScene;
 
   @Override
   public void enter(GameContext context) {
-    currentScene = context.getCurrentMission().getScenes().getFirst();
+    currentScene = context.getCurrentMission().getScenes().get(0);
     displayScene(currentScene, context);
   }
 
   @Override
   public void update(GameContext context) {
-    // Оновлення логіки активного завдання
+    // Перевірка таймера місії, тощо
   }
 
   @Override
   public void exit(GameContext context) {
-    context.getEventPublisher().publishEvent(
-        new com.game.shadowcircle.events.GameEvent("MISSION_ACTIVE_EXIT",
-            "Вихід зі стану активного завдання", null));
+    // Очищення
   }
 
   @Override
-  public GameState handleInput(String input, GameContext context) {
-    Choice choice = parseChoice(input, currentScene);
-    if (choice == null) {
-      return this; // Залишаємось у тому ж стані
-    }
+  public State handleInput(String input, GameContext context) {
+    try {
+      int choiceIndex = Integer.parseInt(input) - 1;
+      List<Choice> choices = currentScene.getChoices();
 
-    GameCommand cmd = new MakeChoiceCommand(choice);
-    cmd.execute(context);
+      if (choiceIndex >= 0 && choiceIndex < choices.size()) {
+        Choice choice = choices.get(choiceIndex);
+        // Обробка вибору через GameEngine
 
-    if (context.getPlayer().getHealth() <= 0) {
-      return new GameOverState();
-    }
-    if (!context.isCoverIntact()) {
-      return new GameOverState();
-    }
-    if (currentScene.isEndingScene()) {
-      return new MissionCompleteState();
+        if (context.getPlayer().getHealth() <= 0) {
+          return new GameOverState();
+        }
+
+        // Перехід до наступної сцени або завершення місії
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Невірне введення");
     }
 
     return this;
   }
 
   private void displayScene(Scene scene, GameContext context) {
-    // Логіка відображення сцени
-  }
+    System.out.println("\n" + scene.getNarrativeText());
 
-  private Choice parseChoice(String input, Scene scene) {
-    // Логіка парсингу вибору
-    return null;
+    List<Choice> choices = scene.getChoices();
+    for (int i = 0; i < choices.size(); i++) {
+      System.out.println((i + 1) + ". " + choices.get(i).getDescription());
+    }
   }
 }

@@ -2,13 +2,14 @@ package com.game.shadowcircle.chain;
 
 import com.game.shadowcircle.model.Choice;
 import com.game.shadowcircle.model.GameContext;
+import com.game.shadowcircle.model.ValidationResult;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
+@Slf4j
 public class ChoiceValidatorChain {
 
   private final List<ChoiceValidator> validators = new ArrayList<>();

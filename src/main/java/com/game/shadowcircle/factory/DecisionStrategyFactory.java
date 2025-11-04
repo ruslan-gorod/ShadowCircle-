@@ -11,8 +11,8 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
+@Slf4j
 public class DecisionStrategyFactory {
 
   private final Map<String, DecisionStrategy> strategies = new HashMap<>();
@@ -40,6 +40,6 @@ public class DecisionStrategyFactory {
 
   public void registerStrategy(String type, DecisionStrategy strategy) {
     strategies.put(type, strategy);
-    log.debug("Зареєстровано стратегію: {}", type);
+    log.debug("Strategy registered: {}", type);
   }
 }

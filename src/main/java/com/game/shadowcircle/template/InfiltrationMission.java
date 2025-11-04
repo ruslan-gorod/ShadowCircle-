@@ -1,6 +1,7 @@
 package com.game.shadowcircle.template;
 
 import com.game.shadowcircle.model.GameContext;
+import com.game.shadowcircle.model.MissionResult;
 import java.util.Random;
 
 public class InfiltrationMission extends AbstractMission {
@@ -14,10 +15,10 @@ public class InfiltrationMission extends AbstractMission {
     context.setSuspicionLevel(context.getSuspicionLevel() + suspicionGain);
 
     if (context.getSuspicionLevel() > getSuspicionThreshold()) {
-      return MissionResult.failure("Вас викрили!");
+      return MissionResult.failure("You have been exposed!");
     }
 
-    return MissionResult.success(calculateReward(context));
+    return MissionResult.success("Success", calculateReward(context));
   }
 
   private int calculateBaseSuspicion(GameContext context) {

@@ -1,6 +1,7 @@
 package com.game.shadowcircle.strategy;
 
 import com.game.shadowcircle.model.Choice;
+import com.game.shadowcircle.model.DecisionResult;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Player;
 import java.util.Random;
@@ -22,8 +23,8 @@ public class TechnicalDecisionStrategy implements DecisionStrategy {
         .suspicionIncrease(success ? 15 : 35)
         .healthChange(0)
         .message(success ?
-            "Технічні засоби допомогли" :
-            "Обладнання підвело")
+            "Technical means helped" :
+            "Equipment failed")
         .build();
   }
 }

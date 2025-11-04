@@ -1,6 +1,7 @@
 package com.game.shadowcircle.strategy;
 
 import com.game.shadowcircle.model.Choice;
+import com.game.shadowcircle.model.DecisionResult;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Player;
 import java.util.Random;
@@ -22,8 +23,8 @@ public class BalancedDecisionStrategy implements DecisionStrategy {
         .suspicionIncrease(success ? 15 : 30)
         .healthChange(success ? 0 : -15)
         .message(success ?
-            "Збалансований підхід спрацював" :
-            "Результат міг бути кращим")
+            "The balanced approach worked" :
+            "The result could have been better.")
         .build();
   }
 }

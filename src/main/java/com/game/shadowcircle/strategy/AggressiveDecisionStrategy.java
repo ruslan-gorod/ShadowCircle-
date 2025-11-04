@@ -1,6 +1,7 @@
 package com.game.shadowcircle.strategy;
 
 import com.game.shadowcircle.model.Choice;
+import com.game.shadowcircle.model.DecisionResult;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Player;
 import java.util.Random;
@@ -20,8 +21,8 @@ public class AggressiveDecisionStrategy implements DecisionStrategy {
         .suspicionIncrease(success ? 30 : 50)
         .healthChange(success ? -20 : -40)
         .message(success ?
-            "Швидке й рішуче виконання!" :
-            "Агресивний підхід призвів до проблем")
+            "Quick and decisive execution!" :
+            "Aggressive approach led to problems")
         .build();
   }
 }

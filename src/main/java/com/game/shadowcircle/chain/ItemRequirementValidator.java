@@ -2,6 +2,7 @@ package com.game.shadowcircle.chain;
 
 import com.game.shadowcircle.model.Choice;
 import com.game.shadowcircle.model.GameContext;
+import com.game.shadowcircle.model.ValidationResult;
 
 public class ItemRequirementValidator extends ChoiceValidator {
 
@@ -9,7 +10,7 @@ public class ItemRequirementValidator extends ChoiceValidator {
   public ValidationResult validate(Choice choice, GameContext context) {
     if (choice.getItemReward() != null
         && !context.getInventory().hasItem(choice.getItemReward().getName())) {
-      return ValidationResult.invalid("Потрібен предмет: " + choice.getItemReward());
+      return ValidationResult.invalid("Required item: " + choice.getItemReward());
     }
     return ValidationResult.valid();
   }

@@ -1,12 +1,10 @@
 package com.game.shadowcircle.command;
 
-import com.game.shadowcircle.model.GameContext;
-
 public interface GameCommand {
 
-  void execute(GameContext context);
+  void execute();
 
-  void undo(GameContext context);
+  void undo();
 
-  boolean canExecute(GameContext context);
+  boolean canExecute();
 }

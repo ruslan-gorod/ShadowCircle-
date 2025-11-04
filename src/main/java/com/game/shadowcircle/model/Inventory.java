@@ -15,13 +15,14 @@ public class Inventory {
 
   @Builder.Default
   private List<Item> items = new ArrayList<>();
+  @Builder.Default
   private int maxCapacity = 20;
 
   public void addItem(Item item) {
     if (items.size() < maxCapacity) {
       items.add(item);
     } else {
-      throw new IllegalStateException("Інвентар повний!");
+      throw new IllegalStateException("Inventory is full!");
     }
   }
 
@@ -50,9 +51,16 @@ public class Inventory {
   }
 
   public Inventory copy() {
-    return Inventory.builder()
-        .items(new ArrayList<>(this.items))
-        .maxCapacity(this.maxCapacity)
-        .build();
+    Inventory copy = new Inventory();
+
+    if (this.items != null) {
+      List<Item> itemsCopy = new ArrayList<>();
+      for (Item item : this.items) {
+        itemsCopy.add(item.copy());
+      }
+      copy.setItems(itemsCopy);
+    }
+
+    return copy;
   }
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Item implements Cloneable {
+public class Item implements Cloneable {
 
   private String id;
   private String name;

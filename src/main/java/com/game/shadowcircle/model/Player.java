@@ -28,6 +28,8 @@ public class Player {
   @Builder.Default
   private int coverIntegrity = 100;
   @Builder.Default
+  private int suspicionLevel = 10;
+  @Builder.Default
   private List<String> skills = new ArrayList<>();
   @Builder.Default
   private String currentDisguise = "civilian";
@@ -69,17 +71,17 @@ public class Player {
   }
 
   public Player copy() {
-    return Player.builder()
-        .name(this.name)
-        .score(this.score)
-        .health(this.health)
-        .stealth(this.stealth)
-        .intelligence(this.intelligence)
-        .charisma(this.charisma)
-        .coverIntegrity(this.coverIntegrity)
-        .currentDisguise(this.currentDisguise)
-        .skills(new ArrayList<>(this.skills))
-        .inventory(this.inventory != null ? this.inventory.copy() : null)
-        .build();
+    Player copy = new Player();
+    copy.setName(this.name);
+    copy.setScore(this.score);
+    copy.setHealth(this.health);
+    copy.setStealth(this.stealth);
+    copy.setIntelligence(this.intelligence);
+
+    if (this.inventory != null) {
+      copy.setInventory(this.inventory.copy());
+    }
+
+    return copy;
   }
 }
