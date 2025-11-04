@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Choice {
 
+  private String id;
   private String description;
   private String nextSceneId;
   private int riskLevel;

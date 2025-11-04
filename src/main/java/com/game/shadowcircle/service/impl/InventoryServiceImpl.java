@@ -32,11 +32,12 @@ public class InventoryServiceImpl implements InventoryService {
     return player.getInventory() != null && player.getInventory().hasItem(itemName);
   }
 
+  @Override
   public void useItem(Player player, Item item) {
     if (player.getInventory() != null && player.getInventory().getItems().contains(item)) {
       item.use(player);
       player.getInventory().getItems().remove(item);
-      log.info("Використано предмет '{}' гравцем '{}'", item.getName(), player.getName());
+      log.info("Item '{}' used by player '{}'", item.getName(), player.getName());
     }
   }
 }

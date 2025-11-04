@@ -17,4 +17,8 @@ public interface GameEngine {
   void applyChoice(Choice choice);
 
   GameState getCurrentState();
+
+  void processInput(String input);
+
+  boolean isGameOver();
 }

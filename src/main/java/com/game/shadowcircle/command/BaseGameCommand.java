@@ -1,19 +1,15 @@
 package com.game.shadowcircle.command;
 
 import com.game.shadowcircle.model.GameContext;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor(force = true)
-@AllArgsConstructor
 @RequiredArgsConstructor
-public abstract class BaseGameCommand implements GameCommand {
+abstract class BaseGameCommand implements GameCommand {
 
-  private final GameContext context;
+  protected final GameContext context;
 
   @Override
-  public boolean canExecute(GameContext context) {
+  public boolean canExecute() {
     return context.getPlayer().isAlive() &&
         context.isCoverIntact();
   }

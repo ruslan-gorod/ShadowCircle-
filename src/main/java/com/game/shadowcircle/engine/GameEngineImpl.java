@@ -1,7 +1,6 @@
 package com.game.shadowcircle.engine;
 
 import com.game.shadowcircle.chain.ChoiceValidatorChain;
-import com.game.shadowcircle.chain.ValidationResult;
 import com.game.shadowcircle.command.GameCommand;
 import com.game.shadowcircle.command.MakeChoiceCommand;
 import com.game.shadowcircle.events.ChoiceMadeEvent;
@@ -14,26 +13,26 @@ import com.game.shadowcircle.events.PlayerHealthChangedEvent;
 import com.game.shadowcircle.events.SuspicionChangedEvent;
 import com.game.shadowcircle.factory.DecisionStrategyFactory;
 import com.game.shadowcircle.model.Choice;
+import com.game.shadowcircle.model.DecisionResult;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.GameState;
 import com.game.shadowcircle.model.Inventory;
 import com.game.shadowcircle.model.Item;
 import com.game.shadowcircle.model.Player;
 import com.game.shadowcircle.model.Scene;
+import com.game.shadowcircle.model.ValidationResult;
 import com.game.shadowcircle.service.CommandProcessor;
 import com.game.shadowcircle.service.DialogueService;
+import com.game.shadowcircle.service.InventoryService;
 import com.game.shadowcircle.service.MissionService;
 import com.game.shadowcircle.service.PlayerService;
 import com.game.shadowcircle.state.GameOverState;
 import com.game.shadowcircle.state.GameStateMachine;
 import com.game.shadowcircle.state.MainMenuState;
-import com.game.shadowcircle.strategy.DecisionResult;
 import com.game.shadowcircle.strategy.DecisionStrategy;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GameEngineImpl implements GameEngine {
@@ -41,6 +40,7 @@ public class GameEngineImpl implements GameEngine {
   private final PlayerService playerService;
   private final DialogueService dialogueService;
   private final MissionService missionService;
+  private final InventoryService inventoryService;
   private final CommandProcessor commandProcessor;
   private final GameStateMachine stateMachine;
   private final DecisionStrategyFactory strategyFactory;
@@ -61,20 +61,20 @@ public class GameEngineImpl implements GameEngine {
         .inventory(new Inventory())
         .build();
 
-    stateMachine.transitionTo(new MainMenuState());
+    stateMachine.transitionTo(new MainMenuState(missionService, inventoryService, eventPublisher));
     eventPublisher.publishEvent(new GameStartedEvent(player));
 
-    dialogueService.print("Гра розпочалась! Успіхів, агент " + playerName + "!");
+    dialogueService.print("The game has begun! Good luck, agent! " + playerName + "!");
   }
 
   @Override
   public void loadGame() {
-    // Логіка завантаження гри
+    // TODO Логіка завантаження гри
   }
 
   @Override
   public void saveGame() {
-    // Логіка збереження гри
+    // TODO Логіка збереження гри
   }
 
   @Override
@@ -85,6 +85,10 @@ public class GameEngineImpl implements GameEngine {
 
   @Override
   public void applyChoice(Choice choice) {
+
+  }
+
+  public void makeChoice(Choice choice) {
     // 1. Валідація
     ValidationResult validation = validatorChain.validate(choice, context);
     if (!validation.isValid()) {
@@ -100,8 +104,8 @@ public class GameEngineImpl implements GameEngine {
     );
 
     // 3. Виконання через Command
-    GameCommand command = new MakeChoiceCommand(choice);
-    commandProcessor.execute(command, context);
+    GameCommand command = new MakeChoiceCommand(choice, strategy, context);
+    commandProcessor.execute(command);
 
     // 4. Отримання результату
     DecisionResult result = strategy.evaluate(choice, context.getPlayer(), context);
@@ -121,7 +125,7 @@ public class GameEngineImpl implements GameEngine {
 
     // Очки
     if (result.getScoreGain() > 0) {
-      player.addScore(result.getScoreGain());
+      playerService.addScore(result.getScoreGain());
     }
 
     // Здоров'я
@@ -136,7 +140,7 @@ public class GameEngineImpl implements GameEngine {
     // Підозра
     if (result.getSuspicionIncrease() != 0) {
       int oldSuspicion = context.getSuspicionLevel();
-      context.setSuspicionLevel(context.getSuspicionLevel() + result.getSuspicionIncrease());
+      context.addSuspicion(result.getSuspicionIncrease());
       eventPublisher.publishEvent(
           new SuspicionChangedEvent(oldSuspicion, context.getSuspicionLevel(), "choice_consequence")
       );
@@ -176,9 +180,20 @@ public class GameEngineImpl implements GameEngine {
 
   @Override
   public GameState getCurrentState() {
-    return GameState.builder()
+    // Конвертуємо внутрішній стан у існуючий State
+    return com.game.shadowcircle.model.GameState.builder()
         .player(context.getPlayer())
         .currentMission(context.getCurrentMission())
         .build();
+  }
+
+  @Override
+  public void processInput(String input) {
+
+  }
+
+  @Override
+  public boolean isGameOver() {
+    return false;
   }
 }

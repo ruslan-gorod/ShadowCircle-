@@ -1,6 +1,7 @@
 package com.game.shadowcircle.strategy;
 
 import com.game.shadowcircle.model.Choice;
+import com.game.shadowcircle.model.DecisionResult;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Player;
 

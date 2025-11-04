@@ -2,8 +2,9 @@ package com.game.shadowcircle.state;
 
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Mission;
+import java.time.LocalDateTime;
 
-public class MissionBriefingState implements GameState {
+public class MissionBriefingState implements State {
 
   @Override
   public void enter(GameContext context) {
@@ -19,11 +20,11 @@ public class MissionBriefingState implements GameState {
   public void exit(GameContext context) {
     context.getEventPublisher().publishEvent(
         new com.game.shadowcircle.events.GameEvent("MISSION_BRIEFING_EXIT",
-            "Вихід зі стану брифінгу місій", null));
+            "Exit from mission briefing state", null, LocalDateTime.now(), 0));
   }
 
   @Override
-  public GameState handleInput(String input, GameContext context) {
+  public State handleInput(String input, GameContext context) {
     Mission selected = selectMission(input, context);
     if (selected != null) {
       context.setCurrentMission(selected);
@@ -33,11 +34,11 @@ public class MissionBriefingState implements GameState {
   }
 
   private void displayAvailableMissions(GameContext context) {
-    // Логіка відображення доступних місій
+    // TODO Логіка відображення доступних місій
   }
 
   private Mission selectMission(String input, GameContext context) {
-    // Логіка вибору місії
+    // TODO Логіка вибору місії
     return null;
   }
 }

@@ -1,35 +1,36 @@
 package com.game.shadowcircle.state;
 
 import com.game.shadowcircle.model.GameContext;
+import java.time.LocalDateTime;
 
-public class GameOverState implements GameState {
+public class GameOverState implements State {
 
   @Override
   public void enter(GameContext context) {
-    context.getEventPublisher().publishEvent(
-        new com.game.shadowcircle.events.GameEvent("GAME_OVER_ENTER", "Вхід у стан завершення гри",
-            null));
+    System.out.println("\n=== GAME COMPLETED ===");
+    System.out.println("Final score: " + context.getPlayer().getScore());
+
+    if (!context.getPlayer().isAlive()) {
+      System.out.println("You died...");
+    } else if (!context.isCoverIntact()) {
+      System.out.println("Your legend has been exposed!");
+    }
   }
 
   @Override
   public void update(GameContext context) {
-    // Оновлення логіки екрану завершення гри
+    // TODO Оновлення логіки екрану завершення гри
   }
 
   @Override
   public void exit(GameContext context) {
     context.getEventPublisher().publishEvent(
         new com.game.shadowcircle.events.GameEvent("GAME_OVER_EXIT",
-            "Вихід зі стану завершення гри", null));
+            "Вихід зі стану завершення гри", null, LocalDateTime.now(), 0));
   }
 
   @Override
-  public GameState handleInput(String input, GameContext context) {
-    if ("restart".equalsIgnoreCase(input)) {
-      return new MainMenuState();
-    } else if ("exit".equalsIgnoreCase(input)) {
-      System.exit(0);
-    }
-    return this;
+  public State handleInput(String input, GameContext context) {
+    return new MainMenuState();
   }
 }

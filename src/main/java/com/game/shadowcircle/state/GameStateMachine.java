@@ -5,38 +5,36 @@ import com.game.shadowcircle.events.GameEventPublisher;
 import com.game.shadowcircle.model.GameContext;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Data
 @Service
 @RequiredArgsConstructor
 public class GameStateMachine {
 
   private final GameEventPublisher eventPublisher;
-  private final Deque<GameState> stateHistory = new ArrayDeque<>();
-  private GameState currentState;
+  private final Deque<State> stateHistory = new ArrayDeque<>();
+  private State currentState;
 
   /**
    * Перехід до нового стану
    */
-  public void transitionTo(GameState newState) {
+  public void transitionTo(State newState) {
     if (currentState != null) {
-      log.debug("Вихід зі стану: {}", currentState.getClass().getSimpleName());
+      log.debug("Exit from the state: {}", currentState.getClass().getSimpleName());
       currentState.exit(null);
       stateHistory.addLast(currentState);
     }
 
-    log.debug("Перехід до стану: {}", newState.getClass().getSimpleName());
+    log.debug("Transition to state: {}", newState.getClass().getSimpleName());
     currentState = newState;
     currentState.enter(null);
 
     eventPublisher.publishEvent(
         GameEvent.of("STATE_CHANGED",
-            "Новий стан: " + newState.getClass().getSimpleName())
+            "New state: " + newState.getClass().getSimpleName())
     );
   }
 
@@ -52,7 +50,7 @@ public class GameStateMachine {
   /**
    * Обробка введення
    */
-  public GameState handleInput(String input, GameContext context) {
+  public State handleInput(String input, GameContext context) {
     if (currentState != null) {
       return currentState.handleInput(input, context);
     }

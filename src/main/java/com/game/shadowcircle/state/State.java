@@ -2,7 +2,7 @@ package com.game.shadowcircle.state;
 
 import com.game.shadowcircle.model.GameContext;
 
-public interface GameState {
+public interface State {
 
   void enter(GameContext context);
 
@@ -10,5 +10,5 @@ public interface GameState {
 
   void exit(GameContext context);
 
-  GameState handleInput(String input, GameContext context);
+  State handleInput(String input, GameContext context);
 }

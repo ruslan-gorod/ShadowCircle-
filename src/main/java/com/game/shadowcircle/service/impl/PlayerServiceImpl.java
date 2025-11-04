@@ -2,7 +2,6 @@ package com.game.shadowcircle.service.impl;
 
 import com.game.shadowcircle.model.Player;
 import com.game.shadowcircle.service.PlayerService;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
-  @Getter
   private Player currentPlayer;
 
   @Override

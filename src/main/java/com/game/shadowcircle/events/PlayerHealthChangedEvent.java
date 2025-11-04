@@ -1,18 +1,28 @@
 package com.game.shadowcircle.events;
 
-import lombok.Getter;
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class PlayerHealthChangedEvent extends GameEvent {
 
-  private final int oldHealth;
-  private final int newHealth;
-  private final String reason;
+  private int previousHealth;
+  private int currentHealth;
+  private int change;
+  private int severity;
+  private String cause;
 
-  public PlayerHealthChangedEvent(int oldHealth, int newHealth, String reason) {
-    super("PLAYER_HEALTH_CHANGED", "Зміна здоров'я: " + oldHealth + " -> " + newHealth, null);
-    this.oldHealth = oldHealth;
-    this.newHealth = newHealth;
-    this.reason = reason;
+  public PlayerHealthChangedEvent(int previousHealth, int currentHealth, String cause) {
+    super();
+    this.setType("PLAYER_HEALTH_CHANGED");
+    this.change = currentHealth - previousHealth;
+    this.setMessage(String.format("Health changed: %+d (reason: %s)", change, cause));
+    this.setSeverity(change < -20 ? 2 : 1);
+    this.setTimestamp(LocalDateTime.now());
+    this.previousHealth = previousHealth;
+    this.currentHealth = currentHealth;
+    this.cause = cause;
   }
 }

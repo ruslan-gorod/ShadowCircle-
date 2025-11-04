@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 public class RewardItem extends Item {
 
   public RewardItem(String name, String description) {
-    super(name, description);
+    this.setName(name);
+    this.setDescription(description);
   }
 
   @Override

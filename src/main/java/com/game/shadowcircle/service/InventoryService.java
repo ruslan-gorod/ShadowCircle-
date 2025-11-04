@@ -10,4 +10,6 @@ public interface InventoryService {
   void removeItem(Player player, Item item);
 
   boolean hasItem(Player player, String itemName);
+
+  void useItem(Player player, Item item);
 }

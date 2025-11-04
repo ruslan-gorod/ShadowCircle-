@@ -1,15 +1,35 @@
 package com.game.shadowcircle.events;
 
-import com.game.shadowcircle.template.AbstractMission;
-import lombok.Getter;
+import com.game.shadowcircle.factory.Difficulty;
+import com.game.shadowcircle.model.Mission;
+import com.game.shadowcircle.model.Player;
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
+/**
+ * Подія початку місії
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class MissionStartedEvent extends GameEvent {
 
-  private final AbstractMission mission;
+  private Mission mission;
+  private Player player;
+  private Difficulty difficulty;
 
-  public MissionStartedEvent(AbstractMission mission) {
-    super("MISSION_STARTED", "Розпочато місію: " + mission.getClass().getSimpleName(), mission);
+  public MissionStartedEvent(Mission mission, Player player, Difficulty difficulty) {
+    super();
+    this.setType("MISSION_STARTED");
+    this.setMessage(String.format("Mission started: %s", mission.getTitle()));
+    this.setPayload(mission);
+    this.setTimestamp(LocalDateTime.now());
     this.mission = mission;
+    this.player = player;
+    this.difficulty = difficulty;
+  }
+
+  public MissionStartedEvent(Mission mission) {
+    this(mission, null, Difficulty.AGENT);
   }
 }

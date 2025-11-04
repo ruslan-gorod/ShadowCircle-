@@ -1,12 +1,12 @@
 package com.game.shadowcircle.memento;
 
 import com.game.shadowcircle.model.GameState;
-import com.game.shadowcircle.model.Player;
-import com.game.shadowcircle.model.Mission;
 import com.game.shadowcircle.model.Item;
+import com.game.shadowcircle.model.Mission;
+import com.game.shadowcircle.model.Player;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -26,7 +26,6 @@ public class GameStateMemento {
   private final int suspicionLevel;
   private final LocalDateTime timestamp;
 
-  // Private constructor, доступний тільки через GameState
   private GameStateMemento(GameState state) {
     Player player = state.getPlayer();
     this.playerName = player.getName();
