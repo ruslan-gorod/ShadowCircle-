@@ -13,6 +13,7 @@ public class GameOverEvent extends GameEvent {
   private int finalScore;
   private int severity;
   private Player player;
+
   public GameOverEvent(GameOverReason reason, int finalScore, Player player) {
     super();
     this.setType("GAME_OVER");

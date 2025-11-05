@@ -4,6 +4,7 @@ import com.game.shadowcircle.events.GameEvent;
 import com.game.shadowcircle.events.GameEventPublisher;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Player;
+import com.game.shadowcircle.service.SaveGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class ExitState implements State {
 
   private final GameEventPublisher eventPublisher;
+  private final SaveGameService saveGameService;
   private boolean confirmationShown = false;
 
   @Override
@@ -39,7 +41,7 @@ public class ExitState implements State {
           context.getChoiceHistory() != null ? context.getChoiceHistory().size() : 0);
 
       // Перевіряємо чи є незбережений прогрес
-      if (context.getTurnNumber() > 0 && !isGameSaved(context)) {
+      if (context.getTurnNumber() > 0 && !isGameSaved()) {
         System.out.println("\nWARNING: Unsaved progress will be lost!");
       }
 
@@ -101,7 +103,7 @@ public class ExitState implements State {
       System.out.println("Saving the game...");
       try {
         // TODO Тут має бути виклик сервісу збереження
-//         saveGameService.save(context);
+        saveGameService.save(context);
         System.out.println("Game saved!");
 
         // Публікуємо подію збереження
@@ -171,10 +173,13 @@ public class ExitState implements State {
   /**
    * Перевіряє чи була гра збережена
    */
-  private boolean isGameSaved(GameContext context) {
-    if (context.getGameData().containsKey("lastSaved")) {
-      return true;
+  private boolean isGameSaved() {
+    // Перевіряємо чи існує автозбереження
+    try {
+      return saveGameService.exists("autosave");
+    } catch (Exception e) {
+      log.error("Failed to check if game is saved", e);
+      return false;
     }
-    return false;
   }
 }

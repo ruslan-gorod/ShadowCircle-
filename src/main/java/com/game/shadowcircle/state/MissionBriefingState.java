@@ -1,10 +1,15 @@
 package com.game.shadowcircle.state;
 
+import com.game.shadowcircle.events.GameEventPublisher;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Mission;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class MissionBriefingState implements State {
+
+  private final GameEventPublisher eventPublisher;
 
   @Override
   public void enter(GameContext context) {
@@ -28,7 +33,7 @@ public class MissionBriefingState implements State {
     Mission selected = selectMission(input, context);
     if (selected != null) {
       context.setCurrentMission(selected);
-      return new MissionActiveState();
+      return new MissionActiveState(eventPublisher, context.getCurrentScene());
     }
     return this;
   }

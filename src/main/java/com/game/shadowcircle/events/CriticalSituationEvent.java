@@ -11,6 +11,7 @@ public class CriticalSituationEvent extends GameEvent {
   private SituationType situationType;
   private String details;
   private int severity;
+
   public CriticalSituationEvent(SituationType situationType, String details) {
     super();
     this.setType("CRITICAL_SITUATION");

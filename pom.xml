@@ -79,6 +79,11 @@
       <artifactId>jakarta.annotation-api</artifactId>
       <version>2.1.1</version>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.20.0</version>
+    </dependency>
 
     <!--  Testing  -->
     <dependency>

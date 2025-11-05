@@ -1,12 +1,16 @@
 package com.game.shadowcircle.state;
 
+import com.game.shadowcircle.events.GameEventPublisher;
 import com.game.shadowcircle.model.Choice;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Scene;
 import java.util.List;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class MissionActiveState implements State {
 
+  private final GameEventPublisher eventPublisher;
   private Scene currentScene;
 
   @Override
@@ -36,7 +40,7 @@ public class MissionActiveState implements State {
         // Обробка вибору через GameEngine
 
         if (context.getPlayer().getHealth() <= 0) {
-          return new GameOverState();
+          return new GameOverState(eventPublisher);
         }
 
         // Перехід до наступної сцени або завершення місії

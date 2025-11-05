@@ -1,5 +1,6 @@
 package com.game.shadowcircle.state;
 
+import com.game.shadowcircle.events.GameEventPublisher;
 import com.game.shadowcircle.model.GameContext;
 import com.game.shadowcircle.model.Mission;
 import com.game.shadowcircle.service.MissionService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class MissionSelectionState implements State {
 
   private final MissionService missionService;
+  private final GameEventPublisher eventPublisher;
   private List<Mission> availableMissions;
 
   @Override
@@ -91,7 +93,7 @@ public class MissionSelectionState implements State {
 
       System.out.printf("\n Mission selected: %s\n", selectedMission.getTitle());
 
-      return new MissionBriefingState();
+      return new MissionBriefingState(eventPublisher);
 
     } catch (NumberFormatException e) {
       System.out.println("Please enter a number. Try again.");
